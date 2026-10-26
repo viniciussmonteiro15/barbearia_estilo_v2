@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#211915">
+
+    <meta name="description"
+        content="Agende seu corte na Barbearia Estilo. Escolha os serviços, confira os preços e reserve seu horário.">
+
+    <title>Barbearia | Agendamento</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+        defer>
+    </script>
+
+    <script src="/app.js" defer></script>
+</head>
+
+<body>
+    <!-- Cabeçalho principal -->
+    <header class="topbar">
+        <a class="brand-mark" href="#inicio" aria-label="Barbearia Estilo - início">
+            BE
+        </a>
+
+        <div>
+            <p class="eyebrow">BARBEARIA</p>
+            <h1>Barbearia Estilo</h1>
+        </div>
+
+        <nav aria-label="Navegação principal">
+            <a class="admin-link" href="admin.html">
+                Área do barbeiro
+            </a>
+        </nav>
+    </header>
+
+    <!-- Conteúdo principal da página -->
+    <main class="container" id="inicio">
+
+        <!-- Apresentação da barbearia -->
+        <section class="intro" aria-labelledby="introTitle">
+            <p class="eyebrow">SEU PRÓXIMO CORTE COMEÇA AQUI</p>
+
+            <h2 id="introTitle">
+                Agende seu horário<br>
+                <span>com tranquilidade.</span>
+            </h2>
+
+            <p>
+                Preencha seus dados, escolha o horário e o serviço.
+                É simples e rápido.
+            </p>
+        </section>
+
+        <!-- Etapas do agendamento -->
+        <nav class="steps" aria-label="Etapas do agendamento">
+            <div class="step active" id="step1" aria-current="step">
+                <span aria-hidden="true">1</span>
+                Seus dados
+            </div>
+
+            <div class="step" id="step2">
+                <span aria-hidden="true">2</span>
+                Horário e serviços
+            </div>
+
+            <div class="step" id="step3">
+                <span aria-hidden="true">3</span>
+                Pagamento
+            </div>
+        </nav>
+
+        <!-- Etapa 1: dados do cliente -->
+        <section class="panel" id="customerPanel" aria-labelledby="customerTitle">
+            <header class="panel-heading">
+                <span class="number" aria-hidden="true">01</span>
+
+                <div>
+                    <h2 id="customerTitle">Quem está agendando?</h2>
+                    <p>Precisamos dessas informações para confirmar seu horário.</p>
+                </div>
+            </header>
+
+            <form id="customerForm">
+                <div>
+                    <label for="fullName">Nome completo</label>
+                    <input
+                        id="fullName"
+                        name="fullName"
+                        type="text"
+                        autocomplete="name"
+                        placeholder="Ex.: João da Silva"
+                        required>
+                </div>
+
+                <div>
+                    <label for="phone">Celular com DDD</label>
+                    <input
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        inputmode="tel"
+                        autocomplete="tel"
+                        placeholder="(11) 99999-9999"
+                        required>
+                </div>
+
+                <button
+    class="button primary full"
+    id="continueButton"
+    type="button">
+    Continuar <span aria-hidden="true">→</span>
+</button>
+            </form>
+        </section>
+
+        <!-- Etapa 2: escolha da data, horário e serviços -->
+        <section
+            class="panel hidden"
+            id="schedulePanel"
+            aria-labelledby="scheduleTitle">
+
+            <header class="panel-heading">
+                <span class="number" aria-hidden="true">02</span>
+
+                <div>
+                    <h2 id="scheduleTitle">Escolha seu horário</h2>
+                    <p>Selecione um dia, um horário e os serviços desejados.</p>
+                </div>
+            </header>
+
+            <form id="scheduleForm">
+                <div>
+                    <label for="date">Dia do atendimento</label>
+                    <input id="date" name="date" type="date" required>
+                </div>
+
+                <div>
+                    <label for="time">Horário disponível</label>
+                    <select id="time" name="time" required>
+                        <option value="">Primeiro escolha uma data</option>
+                    </select>
+                </div>
+
+                <p id="slotMessage" class="helper" aria-live="polite">
+                    Os horários ocupados não aparecem na lista.
+                </p>
+
+                <fieldset class="services-fieldset">
+                    <legend>Quais serviços você deseja?</legend>
+
+                    <p class="helper">Você pode escolher mais de um serviço.</p>
+
+                    <div id="services" class="service-list">
+                        <p>Carregando serviços...</p>
+                    </div>
+                </fieldset>
+
+                <section class="total-box" aria-label="Resumo do preço">
+                    <span>Valor total</span>
+                    <output id="total" aria-live="polite">R$ 0,00</output>
+                </section>
+
+                <p id="scheduleError" class="error" role="alert"></p>
+
+                <div class="button-row">
+                    <button class="button secondary" id="back1" type="button">
+                        Voltar
+                    </button>
+
+                    <button class="button primary" id="finish" type="button">
+                        Finalizar
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Etapa 3: pagamento e confirmação -->
+        <section
+            class="panel hidden"
+            id="paymentPanel"
+            aria-labelledby="paymentTitle">
+
+            <header class="panel-heading">
+                <span class="number" aria-hidden="true">03</span>
+
+                <div>
+                    <h2 id="paymentTitle">Como deseja pagar?</h2>
+                    <p>Confira seu resumo e escolha como pagar.</p>
+                </div>
+            </header>
+
+            <section class="summary-section" aria-label="Resumo do agendamento">
+                <div class="summary" id="summary"></div>
+            </section>
+
+            <fieldset class="payment-choices">
+                <legend>Forma de pagamento</legend>
+
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="pix" required>
+
+                    <span>
+                        <strong>Pix agora</strong>
+                        <small>Esta versão está em modo de demonstração.</small>
+                    </span>
+
+                    <span class="payment-icon" aria-hidden="true">▦</span>
+                </label>
+
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="later" required>
+
+                    <span>
+                        <strong>Pagar depois</strong>
+                        <small>Pague na barbearia, quando vier cortar.</small>
+                    </span>
+
+                    <span class="payment-icon" aria-hidden="true">R$</span>
+                </label>
+            </fieldset>
+
+            <!-- Área demonstrativa do Pix -->
+            <section id="pixArea" class="pix-area hidden" aria-labelledby="pixTitle">
+                <aside class="demo-warning" role="note">
+                    Pix de demonstração: não envie dinheiro.
+                    Nenhuma cobrança real será feita.
+                </aside>
+
+                <h3 class="pix-title" id="pixTitle">
+                    QR Code de demonstração
+                </h3>
+
+                <div
+                    id="qrcode"
+                    class="qr-frame"
+                    role="img"
+                    aria-label="QR Code de demonstração">
+                </div>
+
+                <label for="pixKey">Chave fictícia para teste</label>
+
+                <div class="copy-row">
+                    <input
+                        id="pixKey"
+                        type="text"
+                        readonly
+                        value="barbearia.teste@example.com"
+                        aria-describedby="copyMessage">
+
+                    <button class="button secondary" id="copyPix" type="button">
+                        Copiar
+                    </button>
+                </div>
+
+                <p class="helper" id="copyMessage" aria-live="polite">
+                    Este QR Code não confirma pagamento real.
+                </p>
+            </section>
+
+            <p id="paymentError" class="error" role="alert"></p>
+
+            <div class="button-row">
+                <button class="button secondary" id="back2" type="button">
+                    Voltar
+                </button>
+
+                <button class="button primary" id="confirm" type="button">
+                    Confirmar agendamento
+                </button>
+            </div>
+        </section>
+
+        <!-- Resultado do agendamento -->
+        <section
+            class="panel hidden success-panel"
+            id="successPanel"
+            aria-labelledby="successTitle"
+            aria-live="polite">
+
+            <div class="success-icon" aria-hidden="true">✓</div>
+
+            <h2 id="successTitle">Agendamento registrado!</h2>
+
+            <p id="successMessage"></p>
+
+            <div class="button-row">
+                <a
+                    id="whatsappLink"
+                    class="button primary hidden"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    Enviar resumo pelo WhatsApp
+                </a>
+
+                <button class="button secondary" id="restart" type="button">
+                    Novo agendamento
+                </button>
+            </div>
+
+            <p class="helper">
+                Guarde o resumo do seu agendamento.
+                O pagamento Pix não é confirmado nesta demonstração.
+            </p>
+        </section>
+
+        <!-- Orientação para clientes -->
+        <aside class="help-note" aria-label="Ajuda">
+            <span class="help-icon" aria-hidden="true">i</span>
+
+            <p>
+                <strong>Precisa de ajuda?</strong><br>
+                Se tiver dificuldade, peça ajuda à equipe da barbearia.
+            </p>
+        </aside>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="site-footer">
+        <p>
+            © <span id="year"></span>
+            Barbearia Estilo · Atendimento com cuidado.
+        </p>
+    </footer>
+</body>
+
+</html>

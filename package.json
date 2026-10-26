@@ -1,0 +1,19 @@
+
+{
+  "name": "barbearia-estilo",
+  "version": "2.0.0",
+  "description": "Sistema de agendamento para barbearia com API, banco SQLite e painel administrativo",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.0.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}
